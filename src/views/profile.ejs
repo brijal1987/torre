@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+  <html>
+  <title>Torre Profile</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+  html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
+  </style>
+  <body class="w3-light-grey">
+<!-- Header -->
+<header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
+  <h1 class="w3-xlarge">Torre</h1>
+  <div class="w3-padding-32">
+    <div class="w3-bar w3-border">
+      <a href="http://localhost:9000/" class="w3-bar-item w3-button">Home</a>
+      <a href="http://localhost:9000/profile/brijalsavaliya" class="w3-bar-item w3-button">Profile - brijalsavaliya</a>
+      <a href="http://localhost:9000/opportunities/Yd62lOdp" class="w3-bar-item w3-button w3-light-grey">Opportunity - Yd62lOdp</a>
+    </div>
+  </div>
+</header>
+
+  <!-- Page Container -->
+  <div class="w3-content w3-margin-top" style="max-width:1400px;">
+  
+    <!-- The Grid -->
+    <div class="w3-row-padding">
+    
+      <!-- Left Column -->
+      <div class="w3-third">
+      
+        <div class="w3-white w3-text-grey w3-card-4">
+          <div class="w3-display-container">
+            <img src="<%= user.person.picture%>" alt="John" style="width:100%">
+            <div class="w3-display-bottomleft w3-container w3-text-black">
+              <h2><%= user.person.name %></h2>
+            </div>
+          </div>
+          <div class="w3-container">
+            <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i><%= user.person.professionalHeadline %></p>
+            <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i><%= user.person.location.name %></p>
+            <hr>
+            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Skills</b></p>
+            <% for(var i=0; i<user.strengths.length; i++) {%>
+                <%= user.strengths[i].name%>,&nbsp;
+            <% } %>
+            <br>
+            <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b></p>
+            <% for(var i=0; i<user.languages.length; i++) {%>
+                <p><%= user.languages[i].language%></p>
+                <p><b><%= user.languages[i].fluency%></b></p>
+            <% } %>
+          </div>
+        </div><br>
+  
+      <!-- End Left Column -->
+      </div>
+  
+      <!-- Right Column -->
+      <div class="w3-twothird">
+      
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+          <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Work Experience</h2>
+          <% for(var i=0; i<user.jobs.length; i++) { %>
+            <div class="w3-container">
+                <h5 class="w3-opacity"><b><%= user.jobs[i].name%>/ <%= user.jobs[i].organizations[0].name  %></b></h5>
+                <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i><%= user.jobs[i].fromMonth%> <%= user.jobs[i].fromYear%> - 
+                    <% if(user.jobs[i].toMonth === '' ) {%>
+                        <span class="w3-tag w3-teal w3-round">Current</span>
+                        <% }else{ %> 
+                        <%= user.jobs[i].toMonth%> <%= user.jobs[i].toYear%>
+                        <% } %>
+                </h6>
+                <hr>
+              </div>
+        <% } %>
+        </div>
+  
+        <div class="w3-container w3-card w3-white">
+          <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Education</h2>
+          <% for(var i=0; i<user.education.length; i++) { %>
+          <div class="w3-container">
+            <h5 class="w3-opacity"><b><%= user.education[i].name%></b></h5>
+            <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i><%= user.education[i].fromMonth%> <%= user.education[i].fromYear%> - 
+                <% if(user.education[i].toMonth === '' ) {%>
+                    <span class="w3-tag w3-teal w3-round">Current</span>
+                    <% }else{ %> 
+                    <%= user.education[i].toMonth%> <%= user.education[i].toYear%>
+                    <% } %>
+            </h6>
+            <hr>
+          </div>
+          <% } %>
+
+        </div>
+  
+      <!-- End Right Column -->
+      </div>
+      
+    <!-- End Grid -->
+    </div>
+    
+    <!-- End Page Container -->
+  </div>
+  
+  </body>
+  </html>
+  
