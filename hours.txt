@@ -1,0 +1,15 @@
+13 January 2021 (3 Hours)
+- Worked on Structure in Nodejs with EJS engine
+- Worked on Profile detail page
+- Worked on Opportunity detail page
+
+16th January (8 Hours)
+- Worked on Opportunity detail page
+- Layout changes for EJS Engine
+- HTML/css changes
+- Worked on Search page
+--- Search By People
+--- Search By Jobs
+--- People and Jobs Listing page
+
+18th January (4 Hours)

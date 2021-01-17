@@ -1,40 +1,95 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<body class="w3-light-grey">
-    <!-- Header -->
-<header class="w3-panel w3-center w3-opacity" style="padding:128px 16px">
-    <h1 class="w3-xlarge">Torre</h1>
-    <div class="w3-padding-32">
-      <div class="w3-bar w3-border">
-        <a href="https://torre-brijal.herokuapp.com/" class="w3-bar-item w3-button">Home</a>
-        <a href="https://torre-brijal.herokuapp.com/profile/brijalsavaliya" class="w3-bar-item w3-button">Profile - brijalsavaliya</a>
-        <a href="https://torre-brijal.herokuapp.com/opportunities/Yd62lOdp" class="w3-bar-item w3-button w3-light-grey">Opportunity - Yd62lOdp</a>
-      </div>
+<%- include('partial/header'); -%>
+<!-- Page Container -->
+<div class="w3-content w3-margin-top" style="max-width:1400px;">
+    <% if(opportunity) { %>
+    <div class="w3-container w3-card w3-white w3-margin-bottom">
+        <img width="100%" height="400px" src="<%= opportunity.attachments[0].address%>" />
     </div>
-  </header>
+    
+    <!-- The Grid -->
+    <div class="w3-row-padding">
+
+      <!-- Left Column -->
+      <div class="w3-third">
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <h2><%-  opportunity.objective %></h2>
+        </div>
+
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Employment Type</h2>
+            <p><%-  opportunity.commitment.code.replace(/ /g, "&nbsp;") %></p>
+        </div>
+
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-money fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Base Salary</h2>
+            <p><%= opportunity.compensation.currency%> <%= opportunity.compensation.minAmount %> - <%= opportunity.compensation.maxAmount %> / <%= opportunity.compensation.periodicity %></p>
+        </div>
+
+        <div class="w3-white w3-text-grey w3-card-4 w3-margin-bottom">
+            <div class="w3-container w3-margin-bottom">
+                <p><i class="fa fa-times fa-fw w3-margin-right w3-large w3-text-teal"></i><b>Deadline:</b> <%= opportunity.deadline %></p>
+                <p><i class="fa fa-location-arrow fa-fw w3-margin-right w3-large w3-text-teal"></i><b>Remote:</b> <%= opportunity.place.remote %></p>
+                <p><i class="fa fa-location-arrow fa-fw w3-margin-right w3-large w3-text-teal"></i><b>Anywhere:</b> <%= opportunity.place.anywhere %></p>
+                <p><i class="fa fa-times-circle fa-fw w3-margin-right w3-large w3-text-teal"></i><b>Any timezone:</b> <%= opportunity.place.timezone %></p>
+                <p><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-teal"></i><%= opportunity.owner.name %> ( Owner)</p>
+                <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i><%= opportunity.owner.professionalHeadline %></p>
+            </div>
+        </div>
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <p class="w3-large"><b><i class="fa fa-asterisk fa-fw w3-margin-right w3-text-teal"></i>Skills</b></p>
+            <% for(var i=0; i<opportunity.strengths.length; i++) {%>
+                <%= opportunity.strengths[i].name%> ( <%= opportunity.strengths[i].experience%> ),&nbsp;
+            <% } %>
+        </div>
   
-<div class="row">
-  <div class="column" style="background-color:#aaa;">
-    <h2><%= opportunity.objective%></h2>
-  </div>
-</div>
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <p class="w3-large w3-text-theme"><b><i class="fa fa-globe fa-fw w3-margin-right w3-text-teal"></i>Languages</b></p>
+            <% for(var i=0; i<opportunity.languages.length; i++) {%>
+                <p><%= opportunity.languages[i].language.name%></p>
+                <p><b><%= opportunity.languages[i].fluency%></b></p>
+            <% } %>
+        </div>
 
-<div class="row">
-  <div class="column" style="background-color:#ccc;">
-    <h2>Column 3</h2>
-    <p>Some text..</p>
-  </div>
-  <div class="column" style="background-color:#ddd;">
-    <h2>Column 4</h2>
-    <p>Some text..</p>
-  </div>
-</div>
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-home fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Organizations</h2>
+            <% for(var i=0; i<opportunity.organizations.length; i++) { %>
+                <h5 class="w3-opacity"><b><%= opportunity.organizations[i].name%></b></h5>
+                    <img width="100px" src="<%= opportunity.organizations[i].picture%>" />
+                    <hr>
+            <% } %>
+        </div>
 
+      <!-- End Left Column -->
+      </div>
+      <!-- Right Column -->
+      <div class="w3-twothird">
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-list fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Description</h2>
+            <p><%-  opportunity.serpTags.description.replace(/ /g, "&nbsp;") %></p>
 
-</body>
-</html>
+        </div>
+
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+          <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Details</h2>
+          <% for(var i=0; i<opportunity.details.length; i++) { %>
+          <div class="w3-container">
+            <h4 class="w3-opacity"><b><%= opportunity.details[i].code%></b></h4>
+            <span class="w3-text-teal">
+                <%- opportunity.details[i].content.replace(/ /g, "&nbsp;") %>
+            </span>
+          </div>
+          <% } %>
+        </div>
+      <!-- End Right Column -->
+      </div>
+    <!-- End Grid -->
+    </div>
+    <!-- End Page Container -->
+    <% else %>
+    <div class="w3-container w3-card w3-white w3-margin-bottom w3-center">
+    <h2>No Data Found</h2>
+    </div>
+    <% } %>
+  </div>
+
+<%- include('partial/footer'); -%>

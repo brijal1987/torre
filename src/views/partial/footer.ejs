@@ -1,0 +1,125 @@
+</body>
+<script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+<script>
+$(function() {
+    $("#search_people_btn").on("click", function () {
+        callAjaxFn('people', '/search/people', { "search": $('#search_people').val(), page: 0, size: 20, offset: 0 })
+    })
+    $("#search_jobs_btn").on("click", function () {
+        callAjaxFn('jobs', '/search/jobs', { "search": $('#search_jobs').val(), page: 0, size: 20, offset: 0 })
+    })
+});
+function callAjaxFn(type, url, data) {
+    showLoader()
+    var baseURL = '<%= config.baseURL%>'
+
+    $.ajax({
+        type: 'POST',
+        dataType:'json',
+        url: url,
+        data: data,
+        success:function(response){ 
+            console.log('response', response)
+            let searchVal = ''
+            let output = `<h1>${type === 'people' ? 'People': 'Jobs'}</h1>`
+            output +='<ul class="items">'
+            if(response.data.length >0) {
+                for(let i=0; i< response.data.length; i++) {
+                        output +=`<li class="items-list">`
+                        if(type === 'people') {
+                            searchVal = $('#search_people').val()
+                            if(response.data[i].picture) {
+                                output += `<a href="${baseURL}profile/${response.data[i].username}"><p><img width="100px" src="${response.data[i].picture}"/></p></a>`
+                            }
+                            output += `<div class="righttxt">
+                                        <h4><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-teal"></i> <a href="${baseURL}profile/${response.data[i].username}">${response.data[i].name}</a></h4>
+                                        <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i> ${response.data[i].professionalHeadline}</p>
+                                        <p><i class="fa fa-location-arrow fa-fw w3-margin-right w3-large w3-text-teal"></i> ${response.data[i].locationName}</p>
+                                        <span> Skills:`
+                            for (let j =0; j<response.data[i].skills.length; j++) {
+                                output += `${response.data[i].skills[j].name}, `
+                            }
+                            output +=`</span></div>`
+                        }
+                        if(type === 'jobs') {
+                            console.log('response.data[i].compensation', response.data[i].compensation)
+                            searchVal = $('#search_jobs').val()
+                            output += `<div class="righttxt">
+                                        <h4><i class="fa fa-user fa-fw w3-margin-right w3-large w3-text-teal"></i> <a href="${baseURL}opportunities/${response.data[i].id}">${response.data[i].objective}</a></h4>
+                                        <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i> ${response.data[i].type}</p>`
+                            if(response.data[i].compensation && response.data[i].compensation.data) {
+                                output += `<p><i class="fa fa-money fa-fw w3-margin-right w3-large w3-text-teal"></i>`
+                                if(response.data[i].compensation.data.currency){
+                                    output += ` ${response.data[i].compensation.data.currency}`
+                                }
+                                if(response.data[i].compensation.data.minAmount){
+                                output += `${response.data[i].compensation.data.minAmount}`
+                                }
+                                output += ` -  `
+                                if(response.data[i].compensation.data.maxAmount){
+                                    output += `${response.data[i].compensation.data.maxAmount}`
+                                }
+                                if(response.data[i].compensation.data.periodicity){
+                                    output += `(${response.data[i].compensation.data.periodicity})`
+                                }
+                                output += `</p>`
+                            }
+                            output += `<span> Skills:`
+                            for (let j =0; j<response.data[i].skills.length; j++) {
+                                output += `${response.data[i].skills[j].name}, `
+                            }
+                            output +=`</span></div>`
+                        }
+
+                        output +=`</li>`
+                }
+            } else {
+                output +=`<li>No ${type === 'people' ? 'People': 'Jobs'} Found</li>`
+            }
+            output +=`</ul>`
+            output +=`<div class="pagination">`
+            output +=`<a href="javascript:void(0)" onclick="callAjax('${type}', '${url}', '${searchVal}', ${response.page}, ${parseInt(response.offset) - parseInt(response.size)}, ${response.size}, 'prev')">&laquo;</a> <a href="javascript:void(0)">${parseInt(response.offset) + parseInt(1)} - ${parseInt(response.offset) + parseInt(response.size)} records from ${response.total}</a> <a href="javascript:void(0)" onclick="callAjax('${type}', '${url}', '${searchVal}', ${response.page}, ${parseInt(response.offset) + parseInt(response.size)}, ${response.size}, 'next')">&raquo;</a>`
+            output +=`</div>`
+
+            $('#list').html(output)
+        }
+    })
+}
+function callAjax(type, url, search, page, offset, size, paggingType) {
+    if(paggingType === 'next') {
+        page = page + 1
+    }
+    if(paggingType === 'prev') {
+        page = page - 1
+    }
+    if(page < 0) {
+        return false;
+    }
+    callAjaxFn(type, url, { "search": search, page: page, size: size, offset: offset })
+}
+function showLoader() {
+    $('#list').html('<div class="loader"></div>')
+}
+function clearForm(){
+    $('.search_field').val('')
+    $('#list').html('');
+}
+function changeTab(evt, tabName) {
+    clearForm()
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    if(evt.currentTarget)
+        evt.currentTarget.className += " active";
+}
+$('#peopleTab').click()
+$('#peopleTab').addClass('active')
+</script>
+</html>

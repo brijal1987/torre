@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
+const config = require('./config')
 
 const app = express()
 
@@ -10,6 +11,7 @@ app.use(cookieParser('secret'))
 app.use(bodyParser.urlencoded({ extended: true }))
 
 const routes = require('./routes')
+app.locals.config = config
 
 app.use('/', routes)
 app.set('views', __dirname + '/views')
