@@ -14,3 +14,9 @@
 
 ## Start server
 `npm start` will start server Running on `http://localhost:9000`
+
+## Run test case
+`npm run test`
+
+## Run Coverage
+`npm run cov`
