@@ -1,5 +1,8 @@
 # torre
 
+## Log working hours
+`src/hours.txt`
+
 ## Clone Repository
 `git clone https://github.com/brijal1987/torre.git`
 
